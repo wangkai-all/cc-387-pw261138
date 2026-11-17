@@ -1,0 +1,50 @@
+{
+  "coarse": {
+    "name": "COARSE",
+    "nx": 4,
+    "ny": 3,
+    "dx": 4.0,
+    "dy": 4.0,
+    "origin_x": 0.0,
+    "origin_y": 0.0,
+    "unit": "m"
+  },
+  "fine": {
+    "name": "FINE",
+    "nx": 8,
+    "ny": 6,
+    "dx": 2.0,
+    "dy": 2.0,
+    "origin_x": 0.0,
+    "origin_y": 0.0,
+    "unit": "m"
+  },
+  "values": [
+    [
+      10.0,
+      12.0,
+      null,
+      16.0
+    ],
+    [
+      11.0,
+      13.0,
+      15.0,
+      17.0
+    ],
+    [
+      null,
+      14.0,
+      16.0,
+      18.0
+    ]
+  ],
+  "hand_checks": {
+    "source_cell_area": 16.0,
+    "target_cell_area": 4.0,
+    "source_valid_count": 10,
+    "source_valid_area": 160.0,
+    "source_area_integral": 2272,
+    "note": "integral = sum(value * 16); each coarse cell is four fine cells each 1/4 of the area"
+  }
+}

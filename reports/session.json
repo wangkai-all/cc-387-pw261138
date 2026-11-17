@@ -1,0 +1,91 @@
+{
+  "baseline": {
+    "fingerprint": "7f00692ab1777c15439d3232a0e3fbcbefa3737e5b188a02390d82def8985592",
+    "mean": 14.506607698811711,
+    "aggregate": 22775.374087134387,
+    "coverage": 0.9085648148148148
+  },
+  "revised": {
+    "fingerprint": "3e1c6ff3bbb121e8c487c54effe228fad68456a74012d22a86b77f9185496774",
+    "mean": 14.512263261867089,
+    "aggregate": 22929.37595375,
+    "coverage": 0.9143518518518519
+  },
+  "diff": {
+    "before": {
+      "computation_id": "c_4264264ef1ae",
+      "fingerprint": "7f00692ab1777c15439d3232a0e3fbcbefa3737e5b188a02390d82def8985592"
+    },
+    "after": {
+      "computation_id": "c_113b2147b170",
+      "fingerprint": "3e1c6ff3bbb121e8c487c54effe228fad68456a74012d22a86b77f9185496774"
+    },
+    "changed_cells": [
+      {
+        "index": 20,
+        "row": 2,
+        "col": 4,
+        "before": 15.561176923076923,
+        "after": 15.550699999999999,
+        "delta": -0.010476923076923939,
+        "status_before": "overlap",
+        "status_after": "overlap"
+      },
+      {
+        "index": 21,
+        "row": 2,
+        "col": 5,
+        "before": 16.044723913043477,
+        "after": 15.9914625,
+        "delta": -0.05326141304347587,
+        "status_before": "overlap",
+        "status_after": "overlap"
+      },
+      {
+        "index": 28,
+        "row": 3,
+        "col": 4,
+        "before": 15.13245641025641,
+        "after": 15.170339583333336,
+        "delta": 0.03788317307692601,
+        "status_before": "overlap",
+        "status_after": "overlap"
+      },
+      {
+        "index": 29,
+        "row": 3,
+        "col": 5,
+        "before": 16.284629090909092,
+        "after": 16.2344359375,
+        "delta": -0.05019315340909358,
+        "status_before": "overlap",
+        "status_after": "overlap"
+      }
+    ],
+    "n_changed": 4,
+    "mean_before": 14.506607698811711,
+    "mean_after": 14.512263261867089,
+    "aggregate_before": 22775.374087134387,
+    "aggregate_after": 22929.37595375
+  },
+  "wire_keys": [
+    "blocks",
+    "computation_id",
+    "fingerprint",
+    "layers",
+    "manifest",
+    "overlap_summary",
+    "owner",
+    "request",
+    "scale",
+    "source_order",
+    "sources",
+    "status",
+    "summary",
+    "support",
+    "target",
+    "timing",
+    "values",
+    "warnings"
+  ]
+}

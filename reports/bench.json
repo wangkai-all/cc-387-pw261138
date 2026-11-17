@@ -1,0 +1,65 @@
+{
+  "runs": [
+    {
+      "nx": 8,
+      "ny": 6,
+      "cell_size": 6.0,
+      "target_cells": 48,
+      "seconds": 0.0022,
+      "cells_per_second": 22177.7,
+      "support_area": 1456.0,
+      "integral": 20943.118399999996,
+      "coverage": 0.8425925925925926,
+      "integral_vs_baseline": 1.0
+    },
+    {
+      "nx": 16,
+      "ny": 12,
+      "cell_size": 3.0,
+      "target_cells": 192,
+      "seconds": 0.0048,
+      "cells_per_second": 39590.7,
+      "support_area": 1528.0,
+      "integral": 22028.643499999987,
+      "coverage": 0.8842592592592593,
+      "integral_vs_baseline": 1.051832066231359
+    },
+    {
+      "nx": 24,
+      "ny": 18,
+      "cell_size": 2.0,
+      "target_cells": 432,
+      "seconds": 0.0104,
+      "cells_per_second": 41386.5,
+      "support_area": 1570.0,
+      "integral": 22724.692999999985,
+      "coverage": 0.9085648148148148,
+      "integral_vs_baseline": 1.0850673030621834
+    },
+    {
+      "nx": 48,
+      "ny": 36,
+      "cell_size": 1.0,
+      "target_cells": 1728,
+      "seconds": 0.0304,
+      "cells_per_second": 56786.3,
+      "support_area": 1570.0,
+      "integral": 22724.692999999963,
+      "coverage": 0.9085648148148148,
+      "integral_vs_baseline": 1.0850673030621822
+    }
+  ],
+  "baseline": {
+    "integral": 20943.118399999996,
+    "target": {
+      "name": "TARGET",
+      "nx": 8,
+      "ny": 6,
+      "dx": 6.0,
+      "dy": 6.0,
+      "origin_x": 0.0,
+      "origin_y": 0.0,
+      "unit": "m"
+    }
+  }
+}

@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grid fusion workbench</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f9f9f7; --text-primary:#0b0b0b; --text-secondary:#52514e;
+  --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --accent:#2a78d6; --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --good:#0ca30c; --warning:#fab219; --critical:#d03b3b;
+  --good-bg:#e7f4e7; --critical-bg:#fdecec; --warning-bg:#fdf3df; --code-bg:#efeee9;
+  --shadow:0 1px 2px rgba(11,11,11,.06);
+  --seq-0:#cde2fb; --seq-1:#9ec5f4; --seq-2:#6da7ec; --seq-3:#3987e5; --seq-4:#256abf; --seq-5:#184f95;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-1:#1a1a19; --page:#0d0d0d; --text-primary:#f0efec; --text-secondary:#c3c2b7;
+    --muted:#898781; --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --accent:#3987e5; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --good-bg:#102a10; --critical-bg:#2a1111; --warning-bg:#2b2411; --code-bg:#232320;
+    --shadow:none;
+    --seq-0:#183a5f; --seq-1:#1c4f83; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#6da7ec; --seq-5:#9ec5f4;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --text-primary:#f0efec; --text-secondary:#c3c2b7;
+  --muted:#898781; --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --accent:#3987e5; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --good-bg:#102a10; --critical-bg:#2a1111; --warning-bg:#2b2411; --code-bg:#232320;
+  --shadow:none;
+  --seq-0:#183a5f; --seq-1:#1c4f83; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#6da7ec; --seq-5:#9ec5f4;
+}
+* { box-sizing:border-box; }
+body { margin:0; padding:18px 22px 70px; background:var(--page); color:var(--text-primary);
+  font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+h1 { font-size:18px; margin:0; font-weight:650; letter-spacing:-.01em; }
+h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin:0 0 10px;
+  color:var(--text-secondary); font-weight:600; }
+h3 { font-size:13px; margin:14px 0 6px; }
+p { margin:0 0 10px; }
+code, .mono { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:12px; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; }
+.muted { color:var(--text-secondary); }
+.k { font-size:12px; color:var(--text-secondary); }
+.num { font-variant-numeric:tabular-nums; }
+button { font:inherit; font-size:13px; border-radius:7px; padding:6px 12px;
+  border:1px solid var(--border); background:var(--surface-1); color:var(--text-primary);
+  cursor:pointer; box-shadow:var(--shadow); }
+button:hover { border-color:var(--axis); }
+button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+button.primary:hover { filter:brightness(1.07); }
+button.danger { border-color:var(--critical); color:var(--critical); }
+button:disabled { opacity:.45; cursor:not-allowed; }
+button:focus-visible, input:focus, select:focus, [tabindex]:focus-visible {
+  outline:2px solid var(--accent); outline-offset:1px; }
+input[type=number], input[type=text], select { font:inherit; font-size:13px;
+  padding:5px 8px; border-radius:6px; border:1px solid var(--border);
+  background:var(--surface-1); color:var(--text-primary); font-variant-numeric:tabular-nums;
+  width:100%; }
+label.field { display:flex; flex-direction:column; gap:3px; font-size:12px;
+  color:var(--text-secondary); min-width:0; }
+table { border-collapse:collapse; width:100%; }
+th, td { text-align:left; padding:4px 8px; border-bottom:1px solid var(--border); }
+th { font-size:11px; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-secondary); font-weight:600; }
+td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+.pill { display:inline-flex; align-items:center; gap:5px; font-size:11px;
+  padding:2px 8px; border-radius:99px; border:1px solid var(--border); white-space:nowrap; }
+.pill .dot { width:7px; height:7px; border-radius:99px; flex:0 0 auto; }
+.badge-good { background:var(--good-bg); color:#0b5e0b; }
+.badge-warn { background:var(--warning-bg); color:#7a5600; }
+.badge-bad { background:var(--critical-bg); color:var(--critical); }
+:root[data-theme="dark"] .badge-good,
+:root[data-theme="dark"] .badge-warn { color:#f0efec; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .badge-good,
+  :root:where(:not([data-theme="light"])) .badge-warn { color:#f0efec; }
+}
+.card { background:var(--surface-1); border:1px solid var(--border); border-radius:10px;
+  padding:14px; box-shadow:var(--shadow); }
+.stack { display:flex; flex-direction:column; gap:12px; }
+.row { display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap; }
+.row > * { flex:1 1 110px; }
+.row > .fixed { flex:0 0 auto; }
+.wrap { display:grid; grid-template-columns:300px minmax(0,1fr) 330px; gap:14px; align-items:start; }
+@media (max-width:1180px) { .wrap { grid-template-columns:1fr; } }
+.banner { padding:8px 12px; border-radius:8px; font-size:13px; margin-bottom:12px; }
+.banner.bad { background:var(--critical-bg); color:var(--critical);
+  border:1px solid color-mix(in srgb, var(--critical) 40%, transparent); }
+.banner.good { background:var(--good-bg); color:#0b5e0b;
+  border:1px solid color-mix(in srgb, var(--good) 35%, transparent); }
+:root[data-theme="dark"] .banner.good { color:#4ec94e; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .banner.good { color:#4ec94e; }
+}
+.banner.warn { background:var(--warning-bg); color:#7a5600;
+  border:1px solid color-mix(in srgb, var(--warning) 45%, transparent); }
+:root[data-theme="dark"] .banner.warn { color:var(--warning); }
+.legend { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.hero { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+@media (max-width:900px) { .hero { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.stat { background:var(--surface-1); border:1px solid var(--border); border-radius:10px;
+  padding:10px 12px; }
+.stat .v { font-size:22px; line-height:1.15; font-variant-numeric:tabular-nums; }
+.stat .k { font-size:11px; }
+.gridmap { position:relative; width:100%; border-radius:8px; overflow:hidden;
+  border:1px solid var(--border); background:var(--surface-1); }
+.gridmap svg { display:block; width:100%; height:auto; touch-action:none; }
+.gridmap text { font-size:9px; fill:var(--text-secondary); font-variant-numeric:tabular-nums; }
+.tooltip { position:absolute; pointer-events:none; z-index:10; min-width:150px;
+  background:var(--surface-1); color:var(--text-primary); border:1px solid var(--border);
+  border-radius:8px; padding:7px 9px; font-size:12px; box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0; transition:opacity .08s; }
+.tooltip.show { opacity:1; }
+.tooltip .tt-v { font-size:16px; font-variant-numeric:tabular-nums; }
+.chartbox { position:relative; }
+.chartbox svg { display:block; width:100%; height:auto; overflow:visible; }
+.chartbox text { font-size:10px; fill:var(--text-secondary); font-variant-numeric:tabular-nums; }
+.chartbox .axis-line { stroke:var(--axis); stroke-width:1; }
+.chartbox .gridline { stroke:var(--grid); stroke-width:1; }
+.chartbox .series { fill:none; stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
+.chartbox .marker { stroke:var(--surface-1); stroke-width:2; }
+.chartbox .direct { font-size:11px; fill:var(--text-secondary); }
+.chartbox .crosshair { stroke:var(--axis); stroke-width:1; stroke-dasharray:3 3; }
+.chartbox .hit { fill:transparent; cursor:crosshair; }
+.tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:10px; }
+.tabs button { border:0; border-radius:6px 6px 0 0; box-shadow:none; background:transparent;
+  padding:6px 10px; color:var(--text-secondary); font-size:12px; }
+.tabs button[aria-selected="true"] { color:var(--text-primary); background:var(--code-bg);
+  font-weight:600; }
+.tabs button:hover { color:var(--text-primary); }
+.tablebox { max-height:300px; overflow:auto; border:1px solid var(--border); border-radius:8px; }
+.tablebox table { font-size:12px; }
+.tablebox th { background:var(--surface-1); position:sticky; top:0; z-index:1; }
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.spin { display:inline-block; width:12px; height:12px; border-radius:50%;
+  border:2px solid var(--border); border-top-color:var(--accent);
+  animation:spin .8s linear infinite; vertical-align:-2px; margin-right:6px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation:none; } }
+details summary { cursor:pointer; font-size:12px; color:var(--text-secondary); }
+.toast { position:fixed; right:18px; bottom:18px; max-width:380px; padding:9px 13px;
+  border-radius:9px; font-size:13px; box-shadow:0 6px 24px rgba(0,0,0,.18);
+  background:var(--surface-1); border:1px solid var(--border); z-index:50; }
+.toast.bad { border-color:var(--critical); color:var(--critical); }
+.switchrow { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.owner-chip { display:inline-flex; align-items:center; gap:5px; }
+.owner-chip i { width:9px; height:9px; border-radius:2px; display:inline-block; }
+</style>
+</head>
+<body>
+<header style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+  <div>
+    <h1>Grid fusion workbench <span class="k">· planar fictitious CRS · intensive field by default</span></h1>
+    <div class="k" id="genline">loading…</div>
+  </div>
+  <div class="row fixed" style="gap:6px">
+    <button id="themeBtn" class="fixed" title="Toggle light/dark">Theme</button>
+    <button id="resetBtn" class="fixed danger">Reset fixtures</button>
+  </div>
+</header>
+
+<div id="staleness"></div>
+
+<div class="wrap">
+  <!-- LEFT: inputs and request -->
+  <div class="stack">
+    <section class="card">
+      <h2>1 · Sources</h2>
+      <div id="sources" class="stack" style="gap:8px"></div>
+      <div id="revisionPanel" style="margin-top:12px"></div>
+    </section>
+
+    <section class="card">
+      <h2>2 · Target grid</h2>
+      <div class="row" style="flex-wrap:wrap">
+        <label class="field">cell size <input id="tg-size" type="number" step="0.5" min="0.5" value="4"></label>
+        <label class="field">nx <input id="tg-nx" type="number" step="1" min="1" value="12"></label>
+        <label class="field">ny <input id="tg-ny" type="number" step="1" min="1" value="9"></label>
+      </div>
+      <div class="row" style="flex-wrap:wrap;margin-top:8px">
+        <label class="field">origin x <input id="tg-ox" type="number" step="1" value="0"></label>
+        <label class="field">origin y <input id="tg-oy" type="number" step="1" value="0"></label>
+      </div>
+      <div class="k" id="targetInfo" style="margin-top:8px"></div>
+    </section>
+
+    <section class="card">
+      <h2>3 · Semantics</h2>
+      <div class="stack" style="gap:8px">
+        <label class="field">field type
+          <select id="statScale">
+            <option value="intensive">intensive — level / concentration (mean)</option>
+            <option value="extensive">extensive — counts (sum)</option>
+          </select>
+        </label>
+        <label class="field">resampling
+          <select id="method">
+            <option value="conservative">area-weighted (conservative)</option>
+            <option value="nearest">nearest neighbour (categorical only)</option>
+          </select>
+        </label>
+        <label class="field">overlap policy
+          <select id="policy">
+            <option value="priority">priority: one source owns the cell</option>
+            <option value="area">area-weighted mean of both</option>
+            <option value="error_weighted">error-weighted mean (1/variance)</option>
+            <option value="sum">sum (counts, disjoint only)</option>
+          </select>
+        </label>
+        <label class="field" id="prioWrap">priority order
+          <input id="priority" type="text" value="ALPHA,BETA" spellcheck="false">
+        </label>
+        <label class="field">gap fill
+          <select id="fill">
+            <option value="none">none — missing stays missing</option>
+            <option value="zone_of_influence">zone of influence (invented, labelled)</option>
+          </select>
+        </label>
+        <div class="row" id="fillOpts" style="display:none">
+          <label class="field">max distance <input id="fillDist" type="number" step="1" min="1" value="9"></label>
+          <label class="field">weight <select id="fillWeight">
+            <option value="inverse_square">inverse square</option>
+            <option value="gaussian">gaussian</option>
+          </select></label>
+        </div>
+        <label class="field" style="flex-direction:row;align-items:center;gap:6px">
+          <input id="pace" type="number" step="0.01" min="0" value="0.00" style="width:70px">
+          <span>pace s/row (to demo cancel)</span>
+        </label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="validateBtn" class="fixed">Check request</button>
+        <button id="runBtn" class="primary fixed">Compute</button>
+        <button id="cancelBtn" class="danger fixed" disabled>Stop</button>
+      </div>
+      <div id="runStatus" class="k" style="margin-top:8px"></div>
+    </section>
+
+    <section class="card">
+      <h2>4 · Overlap review <span id="ovCount" class="k"></span></h2>
+      <div id="ovSummary" class="stack" style="gap:6px"></div>
+      <div class="row" style="margin-top:8px">
+        <button id="ovLoad" class="fixed">Load ledger</button>
+      </div>
+      <div id="ovCases" style="margin-top:8px"></div>
+    </section>
+  </div>
+
+  <!-- MIDDLE: artifact + numbers -->
+  <div class="stack">
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap">
+        <h2 style="margin:0">Artefact <span id="artFp" class="k mono"></span></h2>
+        <div class="row fixed" style="gap:4px">
+          <button id="dlHtml" class="fixed" disabled>Report HTML</button>
+          <button id="dlJson" class="fixed" disabled>JSON</button>
+        </div>
+      </div>
+      <div class="legend" style="margin:10px 0 8px" id="legend"></div>
+      <div class="gridmap" id="mapwrap">
+        <svg id="map" viewBox="0 0 100 75" role="img" aria-label="Fused target grid"></svg>
+        <div class="tooltip" id="tip"></div>
+      </div>
+      <div class="row" style="margin-top:10px;align-items:center">
+        <span class="k" style="flex:0 0 auto">Overlay</span>
+        <div class="row fixed" style="gap:4px;flex:1 1 auto" role="radiogroup" aria-label="Map overlay">
+          <button class="overlayBtn" data-layer="value" aria-pressed="true">Value</button>
+          <button class="overlayBtn" data-layer="owner" aria-pressed="false">Ownership</button>
+          <button class="overlayBtn" data-layer="missing" aria-pressed="false">Missing</button>
+          <button class="overlayBtn" data-layer="conflict" aria-pressed="false">Disagreement</button>
+        </div>
+      </div>
+      <div class="k" id="mapNote" style="margin-top:6px"></div>
+    </section>
+
+    <section class="card">
+      <div class="hero" id="stats"></div>
+      <div id="semantics" style="margin-top:12px"></div>
+    </section>
+
+    <section class="card">
+      <h2>Regional blocks</h2>
+      <div class="tablebox" id="blocks"><div class="k">No result yet.</div></div>
+    </section>
+
+    <section class="card">
+      <h2>Value distribution <span class="k" id="histNote"></span></h2>
+      <div class="chartbox" id="hist"></div>
+    </section>
+
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+        <h2 style="margin:0">Small-grid hand benchmark</h2>
+        <button id="benchBtn" class="fixed" style="padding:3px 9px;font-size:12px">Run</button>
+      </div>
+      <p class="k" style="margin:6px 0">A 4×3 coarse grid at 4 m resampled onto 2×2 m cells
+        with the same origin. Every expected value is one coarse cell's value copied
+        four times, so the arithmetic can be checked by eye before trusting a run.</p>
+      <div id="bench"></div>
+    </section>
+  </div>
+
+  <!-- RIGHT: verification + ledger -->
+  <div class="stack">
+    <section class="card">
+      <h2>Input provenance</h2>
+      <div class="tablebox" style="max-height:none" id="provenance">
+        <div class="k">No result yet.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Report identity</h2>
+      <div id="identity" class="k">No result yet.</div>
+    </section>
+
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+        <h2 style="margin:0">Revision diff</h2>
+        <button id="keepBtn" class="fixed" style="padding:3px 9px;font-size:12px"
+          title="pin the current result as the comparison baseline">Keep as baseline</button>
+      </div>
+      <div id="diff" class="k">Compute a report, keep it as the baseline, submit a
+        revision, then compute again to see exactly which cells moved.</div>
+    </section>
+
+    <section class="card">
+      <h2>Warnings</h2>
+      <ul id="warnings" class="k" style="margin:0 0 0 16px;padding:0"></ul>
+    </section>
+  </div>
+</div>
+
+<div class="sr" id="live" aria-live="polite"></div>
+<script>
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const S = {
+  state: null, run: null, runId: null, timer: null, result: null,
+  overlay: 'value', ledger: null, prev: null, cancelled: false, bench: null,
+};
+
+const fmt = (v, d=3) => (v === null || v === undefined || Number.isNaN(v)) ? '—'
+  : (Math.abs(v) >= 10000 ? v.toLocaleString(undefined,{maximumFractionDigits:1})
+                          : v.toFixed(d));
+const pct = v => (v == null ? '—' : (v*100).toFixed(1) + '%');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function api(path, opts={}) {
+  const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...opts});
+  const body = await r.json().catch(() => ({error:'non-JSON response'}));
+  if (!r.ok) throw new Error(body.error || ('HTTP ' + r.status));
+  return body;
+}
+function toast(msg, bad=false) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (bad ? ' bad' : '');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), bad ? 7000 : 3200);
+}
+function live(msg) { $('#live').textContent = msg; }
+
+/* ---------- request body ---------- */
+function requestBody() {
+  const size = +$('#tg-size').value, nx = +$('#tg-nx').value, ny = +$('#tg-ny').value;
+  const body = {
+    target: {name:'TARGET', nx, ny, dx:size, dy:size,
+             origin_x:+$('#tg-ox').value, origin_y:+$('#tg-oy').value},
+    stat_scale: $('#statScale').value,
+    method: $('#method').value,
+    overlap_policy: $('#policy').value,
+    priority: $('#priority').value.split(',').map(s=>s.trim()).filter(Boolean),
+    fill: $('#fill').value,
+    fill_max_distance: +$('#fillDist').value,
+    fill_weight: $('#fillWeight').value,
+    pace_s: +$('#pace').value,
+  };
+  return body;
+}
+function syncSemantics() {
+  const method = $('#method').value;
+  const scale = $('#statScale').value;
+  if (scale === 'extensive') {
+    $('#policy').value = 'sum';
+    $('#method').value = 'conservative';
+    $('#method').disabled = true;
+    live('Counts use the sum policy; nearest sampling is disabled because it would duplicate or drop counts.');
+  } else {
+    $('#method').disabled = false;
+    if ($('#policy').value === 'sum') $('#policy').value = 'priority';
+  }
+  const p = $('#policy').value;
+  if (method === 'nearest') { $('#policy').value = 'priority'; }
+  $('#prioWrap').style.display = $('#policy').value === 'priority' ? '' : 'none';
+  const fill = $('#fill').value;
+  $('#fillOpts').style.display = fill === 'none' ? 'none' : 'flex';
+  const nx = +$('#tg-nx').value, ny = +$('#tg-ny').value, s = +$('#tg-size').value;
+  $('#targetInfo').textContent = `${nx}×${ny} cells of ${s}×${s} m · ${(nx*ny).toLocaleString()} target cells · domain ${(nx*s).toFixed(0)}×${(ny*s).toFixed(0)} m`;
+}
+
+/* ---------- state render ---------- */
+async function loadState() {
+  S.state = await api('/api/state');
+  const srcs = S.state.sources;
+  $('#genline').textContent = `input generation ${S.state.generation} · ${srcs.length} sources · ${srcs.reduce((a,s)=>a+s.n_valid,0).toLocaleString()} valid source cells`;
+  $('#sources').innerHTML = srcs.map((s, idx) => `
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <span class="owner-chip"><i style="background:var(--s${(idx+1)})"></i>
+        <strong>${esc(s.source)}</strong></span>
+      <span class="pill" title="committed version">v${s.version}</span>
+    </div>
+    <div class="k">${s.grid.nx}×${s.grid.ny} @ ${s.grid.dx}×${s.grid.dy} m ·
+      origin (${s.grid.origin_x}, ${s.grid.origin_y}) · ${s.n_valid} valid / ${s.n_missing} missing
+      ${s.has_error_var ? ' · error variance' : ''}</div>
+  `).join('');
+  if (srcs.length) $('#priority').value = srcs.map(s=>s.source).join(',');
+  renderRevisionPanel();
+  return S.state;
+}
+
+function renderRevisionPanel() {
+  const fx = (S.state?.fixtures || []);
+  const patch = fx.includes('beta_patch_v2.json');
+  $('#revisionPanel').innerHTML = `
+    <div class="k">Submit a revision</div>
+    <div class="row" style="margin-top:6px">
+      <select id="fixtureSel" class="fixed" style="flex:1 1 auto">
+        ${fx.filter(f=>f.startsWith('beta_')).map(f=>`<option value="${esc(f)}">${esc(f)}</option>`).join('')}
+      </select>
+      <button id="patchBtn" class="fixed" ${patch?'':'disabled'} title="fill the lake with a patch sheet">Apply</button>
+    </div>
+    <label class="field" style="margin-top:6px">or paste a patch sheet
+      <input id="patchInline" type="text" spellcheck="false"
+        value='{"source":"BETA","mode":"patch","cells":[[3,4,15.20,0.0009],[4,4,15.55,0.0009]]}'>
+    </label>
+    <div class="row" style="margin-top:6px">
+      <button id="patchInlineBtn" class="fixed">Apply pasted patch</button>
+    </div>`;
+  $('#patchBtn').onclick = async () => {
+    const name = $('#fixtureSel').value;
+    try {
+      const payload = await (await fetch('/api/state')).json();
+      if (name.endsWith('patch_v2.json')) {
+        await applyPatchFromFixture();
+      } else {
+        const r = await api('/api/fixtures/' + encodeURIComponent(name), {method:'POST'});
+        toast(`${r.source} → v${r.version}`);
+        await afterRevision();
+      }
+    } catch (e) { toast(e.message, true); }
+  };
+  $('#patchInlineBtn').onclick = async () => {
+    try {
+      const body = JSON.parse($('#patchInline').value);
+      const r = await api('/api/ingest', {method:'POST', body: JSON.stringify(body)});
+      toast(`patched ${r.patched_cells} cells → v${r.version}`);
+      await afterRevision();
+    } catch (e) { toast(e.message, true); }
+  };
+}
+
+async function applyPatchFromFixture() {
+  // A patch sheet is not a replacement grid: only the named cells change.
+  // It must go through /api/ingest in patch mode so the rest of BETA survives.
+  const r = await api('/api/ingest', {method:'POST', body: JSON.stringify({
+    source:'BETA', mode:'patch',
+    cells: [[3,3,15.51,0.0009],[3,4,15.20,0.0009],[4,3,15.34,0.0009],[4,4,15.55,0.0009]],
+  })});
+  toast(`patched ${r.patched_cells} lake cells → BETA v${r.version}`);
+  await afterRevision();
+}
+
+async function afterRevision() {
+  await loadState();
+  renderStaleness();
+  if (S.result) renderDiffHint();
+}
+
+function renderStaleness() {
+  const box = $('#staleness');
+  if (!S.result) { box.innerHTML = ''; return; }
+  const versions = Object.fromEntries(S.state.sources.map(s => [s.source, s.version]));
+  const stale = S.result.sources.some(s => versions[s.source] !== s.version)
+             || S.result.sources.length !== S.state.sources.length;
+  if (!stale) { box.innerHTML = ''; return; }
+  const have = S.result.sources.map(s => `${s.source} v${s.version}`).join(', ');
+  const now = S.state.sources.map(s => `${s.source} v${s.version}`).join(', ');
+  box.innerHTML = `<div class="banner bad"><strong>Stale report on screen.</strong>
+    It was computed from ${esc(have)}; inputs are now ${esc(now)}.
+    The numbers below still belong to the named version — recompute before quoting them.
+    </div>`;
+}
+
+/* ---------- compute ---------- */
+async function runCompute() {
+  const body = requestBody();
+  $('#runBtn').disabled = true;
+  $('#cancelBtn').disabled = false;
+  $('#runStatus').innerHTML = '<span class="spin"></span>starting…';
+  S.cancelled = false;
+  try {
+    const {run_id} = await api('/api/compute', {method:'POST', body: JSON.stringify(body)});
+    S.runId = run_id;
+    pollRun();
+  } catch (e) {
+    $('#runStatus').textContent = e.message;
+    $('#runBtn').disabled = false;
+    $('#cancelBtn').disabled = true;
+    toast(e.message, true);
+  }
+}
+
+function pollRun() {
+  clearTimeout(S.timer);
+  S.timer = setTimeout(async () => {
+    if (!S.runId) return;
+    let st;
+    try { st = await api('/api/runs/' + S.runId); }
+    catch (e) { $('#runStatus').textContent = e.message; return; }
+    if (st.status === 'running') {
+      const p = st.progress;
+      $('#runStatus').innerHTML = '<span class="spin"></span>computing' +
+        (p ? ` row ${p.row}/${p.rows}` : '…');
+      pollRun();
+      return;
+    }
+    $('#runBtn').disabled = false;
+    $('#cancelBtn').disabled = true;
+    if (st.status === 'done') {
+      $('#runStatus').textContent = `done · fingerprint ${st.fingerprint.slice(0,10)}`;
+      await loadArtifact(st.computation_id);
+    } else if (st.status === 'cancelled') {
+      $('#runStatus').textContent = 'cancelled — nothing was published';
+      live('Computation cancelled. No report was produced.');
+      toast('Cancelled; no report published.');
+      renderStaleness();
+    } else if (st.status === 'superseded') {
+      $('#runStatus').textContent = 'superseded — a revision landed mid-run';
+      toast('A revision landed during the run, so its result was withheld.', true);
+    } else {
+      $('#runStatus').textContent = st.error || st.status;
+      toast(st.error || 'run failed', true);
+    }
+  }, 140);
+}
+
+async function loadArtifact(computationId) {
+  const r = await fetch('/api/report/' + computationId + '.json');
+  const comp = await r.json();
+  S.last = S.result;
+  S.result = comp;
+  if (S.prev && S.prev.computation_id === comp.computation_id) S.prev = null;
+  $('#dlHtml').disabled = false;
+  $('#dlJson').disabled = false;
+  renderAll();
+  renderStaleness();
+  live(`Computation finished with fingerprint ${comp.fingerprint.slice(0,10)}.`);
+}
+
+/* ---------- artifact rendering ---------- */
+const STATUS_LABEL = {valid:'Single source', overlap:'Overlap (merged)', zonal:'Invented (fallback)', missing:'Missing inside footprint', gap:'No source footprint'};
+const OWNER_VAR = i => ['--s1','--s2','--s3'][i] || '--muted';
+
+function renderAll() {
+  renderMap(); renderStats(); renderSemantics(); renderBlocks();
+  renderProvenance(); renderIdentity(); renderWarnings(); renderLegend();
+  renderDiffHint(); renderHist();
+}
+
+function renderLegend() {
+  const src = S.result?.sources || [];
+  const items = [
+    ...src.map((s,i)=>({color: OWNER_VAR(i), label: s.source})),
+    {color:'var(--s3)', label:'Merged / overlap'},
+    {color:'var(--s4)', label:'Invented (fallback)'},
+    {color:'var(--axis)', label:'Missing / gap'},
+  ];
+  $('#legend').innerHTML = items.map(i =>
+    `<span class="pill"><span class="dot" style="background:${i.color}"></span>${esc(i.label)}</span>`).join('');
+}
+
+function renderMap() {
+  const svg = $('#map');
+  const comp = S.result;
+  if (!comp) { svg.innerHTML = ''; return; }
+  const t = comp.target, W = 100, pad = 6;
+  const H = (W - pad*2) * (t.ny * t.dy) / (t.nx * t.dx) + pad*2;
+  svg.setAttribute('viewBox', `0 0 ${100} ${H.toFixed(2)}`);
+  const sx = (W - pad*2) / (t.nx * t.dx);
+  const sy = sx;
+  const x0 = pad, y0 = pad;
+  const min = comp.scale.min, max = comp.scale.max;
+  const ramp = ['--seq-0','--seq-1','--seq-2','--seq-3','--seq-4','--seq-5'];
+  const cssvar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const seqColor = v => {
+    if (v == null) return cssvar('--code-bg');
+    const f = Math.max(0, Math.min(0.9999, (v - min) / (max - min)));
+    return cssvar(ramp[Math.floor(f * ramp.length)]);
+  };
+  const layer = S.overlay;
+  const rects = [];
+  const gaps = [];
+  const order = comp.source_order;
+  for (let r = 0; r < t.ny; r++) {
+    for (let c = 0; c < t.nx; c++) {
+      const i = r*t.nx + c;
+      const x = x0 + c*t.dx*sx, y = y0 + (t.ny-1-r)*t.dy*sy;
+      const w = t.dx*sx, h = t.dy*sy;
+      let fill, cls = '';
+      const v = comp.values[i], st = comp.status[i];
+      if (layer === 'value') fill = seqColor(v);
+      else if (layer === 'owner') {
+        if (st === 1) fill = cssvar(OWNER_VAR(comp.owner[i]));
+        else if (st === 2) fill = cssvar('--s3');
+        else if (st === 3) fill = cssvar('--s4');
+        else fill = cssvar('--code-bg');
+      } else if (layer === 'missing') {
+        fill = comp.layers.missing[i] ? cssvar('--critical') : cssvar('--code-bg');
+      } else {
+        fill = comp.layers.conflict[i] ? cssvar('--critical') : cssvar('--code-bg');
+      }
+      const title = `row ${r}, col ${c}\\nvalue ${v == null ? '—' : v}\\n${STATUS_LABEL[Object.keys({valid:1,overlap:1,zonal:1,missing:1,gap:1})[st-1]] || ''}`;
+      rects.push(`<rect data-i="${i}" x="${x.toFixed(3)}" y="${y.toFixed(3)}" width="${w.toFixed(3)}" height="${h.toFixed(3)}" fill="${fill}" stroke="var(--surface-1)" stroke-width="0.25" tabindex="0" aria-label="${esc(title.replace(/\\n/g,' '))}"><title>${esc(title)}</title></rect>`);
+      if (comp.layers.missing[i] && layer === 'value') {
+        gaps.push(`<line x1="${(x+w*0.3).toFixed(2)}" y1="${(y+h*0.3).toFixed(2)}" x2="${(x+w*0.7).toFixed(2)}" y2="${(y+h*0.7).toFixed(2)}" stroke="var(--muted)" stroke-width="0.4"/>`);
+        gaps.push(`<line x1="${(x+w*0.7).toFixed(2)}" y1="${(y+h*0.3).toFixed(2)}" x2="${(x+w*0.3).toFixed(2)}" y2="${(y+h*0.7).toFixed(2)}" stroke="var(--muted)" stroke-width="0.4"/>`);
+      }
+    }
+  }
+  // source footprints, drawn as outlines so the overlap is visible
+  for (let k = 0; k < comp.sources.length; k++) {
+    const g = comp.sources[k].grid;
+    const x = x0 + (g.origin_x - t.origin_x)*sx;
+    const y = y0 + (t.ny*t.dy - (g.origin_y - t.origin_y + g.ny*g.dy))*sy;
+    const w = g.nx*g.dx*sx, h = g.ny*g.dy*sy;
+    rects.push(`<rect x="${x.toFixed(3)}" y="${y.toFixed(3)}" width="${w.toFixed(3)}" height="${h.toFixed(3)}" fill="none" stroke="${cssvar(OWNER_VAR(k))}" stroke-width="0.7" stroke-dasharray="2 1.5" pointer-events="none"/>`);
+  }
+  svg.innerHTML = rects.join('') + gaps.join('');
+  const note = {
+    value: 'Sequential blue: light = low value, dark = high. Crossed cells have no value.',
+    owner: 'Hue = which source owns the cell; teal = merged from both; amber = invented by the fallback.',
+    missing: 'Red = no value (missing inside a footprint or uncovered). Missing is never zero.',
+    conflict: 'Red = sources disagree by more than 5% of |A| on the shared part of the cell.',
+  }[layer];
+  if (layer === 'conflict') {
+    const n = comp.layers.conflict.reduce((a, b) => a + b, 0);
+    note += n ? ` ${n} cell(s) disagree.` :
+      ' No cell exceeds 5%: the providers agree closely on this target grid.';
+  }
+  if (layer === 'missing') {
+    const n = comp.layers.missing.reduce((a, b) => a + b, 0);
+    note += ` ${n} cell(s) have no value and are excluded, not zero-filled.`;
+  }
+  $('#mapNote').textContent = note;
+  $('#artFp').textContent = comp.fingerprint.slice(0, 12);
+  attachMapHover();
+}
+
+function attachMapHover() {
+  const svg = $('#map'), tip = $('#tip'), wrap = $('#mapwrap');
+  const comp = S.result;
+  const show = (ev, i) => {
+    const r = Math.floor(i / comp.target.nx), c = i % comp.target.nx;
+    const v = comp.values[i], st = comp.status[i];
+    const label = STATUS_LABEL[{1:'valid',2:'overlap',3:'zonal',4:'missing',5:'gap'}[st]] || '—';
+    const owner = st === 1 ? comp.source_order[comp.owner[i]] : (st === 2 ? 'merged' : '—');
+    tip.innerHTML = `<div class="k">row ${r} · col ${c}</div>
+      <div class="tt-v">${v == null ? 'missing' : fmt(v,3)}</div>
+      <div class="k">${esc(label)} · owner ${esc(owner)} · support ${pct(comp.support[i]/10000)}</div>`;
+    const br = wrap.getBoundingClientRect();
+    tip.classList.add('show');
+    tip.style.left = Math.min(br.width - 170, Math.max(4, ev.clientX - br.left + 12)) + 'px';
+    tip.style.top = Math.max(4, ev.clientY - br.top - 10) + 'px';
+  };
+  svg.onmousemove = ev => {
+    const t = ev.target.closest('rect[data-i]');
+    if (t) show(ev, +t.dataset.i); else tip.classList.remove('show');
+  };
+  svg.onmouseleave = () => tip.classList.remove('show');
+  svg.onfocusin = ev => {
+    const t = ev.target.closest('rect[data-i]');
+    if (!t) return;
+    const br = t.getBoundingClientRect();
+    show({clientX: br.right, clientY: br.top + br.height/2}, +t.dataset.i);
+  };
+  svg.onfocusout = () => tip.classList.remove('show');
+}
+
+function renderStats() {
+  const c = S.result;
+  if (!c) return;
+  const s = c.summary, mean = s.mean, agg = s.aggregate, cov = s.coverage;
+  const cards = [
+    ['Support-weighted mean', mean ? fmt(mean.mean, 3) : 'not defined',
+     mean ? `${mean.n_cells} cells · ${fmt(mean.support_area,1)} m² support` : 'count field: see aggregate'],
+    ['Area integral', fmt(agg.sum, 1), `${fmt(agg.support_area,1)} m² supported · ${pct(agg.coverage_fraction)} of domain`],
+    ['Observed coverage', pct(cov.observed_fraction), `${fmt(cov.observed_area,1)} / ${fmt(cov.domain_area,1)} m²`],
+    ['Missing / uncovered', `${s.n_missing_cells} / ${s.n_gap_cells}`, `${s.n_zonal_cells} invented · ${s.n_overlap_cells} merged`],
+  ];
+  $('#stats').innerHTML = cards.map(([k,v,sub]) =>
+    `<div class="stat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div>
+     <div class="k">${esc(sub)}</div></div>`).join('');
+}
+
+function renderSemantics() {
+  const c = S.result;
+  if (!c) { $('#semantics').innerHTML=''; return; }
+  const cons = c.summary.conservation;
+  $('#semantics').innerHTML = `
+    <div class="k" style="margin-bottom:4px">
+      method <strong>${esc(c.request.method)}</strong> · overlap <strong>${esc(c.request.overlap_policy)}</strong>
+      · field <strong>${esc(c.request.stat_scale)}</strong>
+      ${c.request.fill !== 'none' ? ' · fill <strong>' + esc(c.request.fill) + '</strong>' : ''}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><div class="k"><span class="badge-good pill">Preserved</span></div>
+        <ul class="k" style="margin:6px 0 0 15px;padding:0">${cons.preserves.map(x=>`<li>${esc(x)}</li>`).join('') || '<li>nothing</li>'}</ul></div>
+      <div><div class="k"><span class="badge-warn pill">Not preserved</span></div>
+        <ul class="k" style="margin:6px 0 0 15px;padding:0">${cons.does_not_preserve.map(x=>`<li>${esc(x)}</li>`).join('') || '<li>nothing</li>'}</ul></div>
+    </div>
+    <p class="k" style="margin:8px 0 0">${esc(cons.note)}</p>`;
+}
+
+function renderBlocks() {
+  const c = S.result;
+  if (!c) return;
+  const rows = c.blocks.map(b => `<tr><td>${esc(b.name)}</td>
+    <td class="n">${fmt(b.mean,3)}</td><td class="n">${fmt(b.integral,1)}</td>
+    <td class="n">${fmt(b.support_area,1)}</td><td class="n">${fmt(b.block_area,1)}</td>
+    <td class="n">${pct(b.coverage_fraction)}</td><td class="n">${b.n_cells_touched}</td></tr>`).join('');
+  $('#blocks').innerHTML = `<table><thead><tr><th>block</th><th class="n">mean</th>
+    <th class="n">integral</th><th class="n">support m²</th><th class="n">block m²</th>
+    <th class="n">coverage</th><th class="n">cells</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderProvenance() {
+  const c = S.result;
+  if (!c) return;
+  const srcs = c.manifest.sources;
+  const t = c.manifest.target;
+  const rows = srcs.map(s => `<tr>
+    <td>${esc(s.source)}</td><td class="n">v${s.version}</td>
+    <td><code title="${esc(s.sha256)}">${esc(s.sha256.slice(0,12))}</code></td></tr>`).join('');
+  $('#provenance').innerHTML = `<table><thead><tr><th>source</th><th class="n">version</th>
+    <th>content sha256</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="k" style="margin-top:8px">target ${esc(t.name)} ${t.nx}×${t.ny} @ ${t.dx}×${t.dy} m,
+    origin (${t.origin_x}, ${t.origin_y})</div>`;
+}
+
+function renderIdentity() {
+  const c = S.result;
+  if (!c) return;
+  const same = S.state.sources.every(s => c.manifest.sources.some(m => m.source===s.source && m.version===s.version));
+  $('#identity').innerHTML = `
+    <div class="mono" style="word-break:break-all">${esc(c.fingerprint)}</div>
+    <div style="margin-top:6px">computation <code>${esc(c.computation_id)}</code></div>
+    <div style="margin-top:6px" class="${same ? '' : 'badge-bad'}">
+      ${same ? 'matches current inputs' : 'does not match current inputs'}</div>
+    <div class="k" style="margin-top:6px">duration ${fmt(c.duration_s,3)} s ·
+      ${esc(c.timing.started_at)}</div>`;
+}
+
+function renderWarnings() {
+  const c = S.result, el = $('#warnings');
+  if (!c) { el.innerHTML = ''; return; }
+  el.innerHTML = (c.warnings || []).map(w => `<li>${esc(w)}</li>`).join('') || '<li class="k">none</li>';
+}
+
+function renderDiffHint() {
+  const el = $('#diff');
+  if (!S.result) return;
+  if (!S.prev) {
+    el.innerHTML = `<div class="k">No baseline pinned. Current run
+      <code>${esc(S.result.fingerprint.slice(0,10))}</code> can be kept as the baseline.</div>`;
+    return;
+  }
+  const a = S.prev, b = S.result;
+  const rows = [];
+  const n = Math.min(a.values.length, b.values.length);
+  for (let i = 0; i < n; i++) {
+    const x = a.values[i], y = b.values[i];
+    if (x === y) continue;
+    if (x == null && y == null) continue;
+    rows.push(`<tr><td class="n">${Math.floor(i/b.target.nx)}</td><td class="n">${i%b.target.nx}</td>
+      <td class="n">${fmt(x,3)}</td><td class="n">${fmt(y,3)}</td>
+      <td class="n">${x!=null&&y!=null?fmt(y-x,3):'—'}</td></tr>`);
+  }
+  const fb = a.fingerprint.slice(0,8), fa = b.fingerprint.slice(0,8);
+  el.innerHTML = `<div class="k"><code>${fb}</code> → <code>${fa}</code></div>
+    <div class="k" style="margin:4px 0 6px">${rows.length} cell(s) changed · mean
+      ${fmt(a.summary.mean?.mean,3)} → ${fmt(b.summary.mean?.mean,3)}</div>
+    <div class="tablebox"><table><thead><tr><th class="n">row</th><th class="n">col</th>
+      <th class="n">before</th><th class="n">after</th><th class="n">Δ</th></tr></thead>
+      <tbody>${rows.slice(0,80).join('')}</tbody></table></div>
+    ${rows.length > 80 ? '<div class="k">first 80 shown</div>' : ''}`;
+}
+
+/* ---------- small-grid benchmark ---------- */
+async function loadBenchmark() {
+  try {
+    const b = await api('/api/benchmark');
+    S.bench = b;
+    const ok = Object.values(b.checks).every(Boolean);
+    const vals = b.fine_values.map(v => v == null ? '×' : fmt(v, 1));
+    const rows = [];
+    for (let r = 0; r < b.fine.ny; r++) {
+      rows.push(`<tr><td class="n k">r${r}</td>${vals.slice(r*b.fine.nx, (r+1)*b.fine.nx)
+        .map(v => `<td class="n">${v}</td>`).join('')}</tr>`);
+    }
+    $('#bench').innerHTML = `
+      <div class="tablebox" style="max-height:none">
+        <table><thead><tr><th>fine</th>${Array.from({length:b.fine.nx},(_,c)=>`<th class="n">c${c}</th>`).join('')}</tr></thead>
+        <tbody>${rows.join('')}</tbody></table></div>
+      <table style="margin-top:8px"><tbody>
+        <tr><td>coarse integral</td><td class="n">${fmt(b.coarse_integral,1)}</td></tr>
+        <tr><td>fine integral</td><td class="n">${fmt(b.fine_integral,1)}</td></tr>
+        <tr><td>support mean</td><td class="n">${fmt(b.mean,3)}</td></tr>
+        <tr><td>missing fine cells</td><td class="n">${b.missing_cells.length}</td></tr>
+      </tbody></table>
+      <div style="margin-top:8px" class="stack">
+        ${Object.entries(b.checks).map(([k,v]) =>
+          `<span class="pill ${v?'badge-good':'badge-bad'}">${v?'PASS':'FAIL'} · ${esc(k.replace(/_/g,' '))}</span>`).join('')}
+      </div>
+      <div class="k" style="margin-top:8px">${ok ? 'All hand-checkable identities hold.' :
+        'A benchmark identity failed: do not trust the run.'}</div>`;
+    live(ok ? 'Benchmark passed' : 'Benchmark failed');
+  } catch (e) { toast(e.message, true); }
+}
+
+/* ---------- histogram (bar chart, hover tooltip) ---------- */
+function renderHist() {
+  const c = S.result;
+  const box = $('#hist');
+  if (!c) { box.innerHTML = '<div class="k">No result yet.</div>'; return; }
+  const vals = c.values.filter(v => v != null);
+  if (!vals.length) { box.innerHTML = '<div class="k">No valued cells.</div>'; return; }
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const bins = 14, width = (hi - lo) / bins || 1;
+  const counts = new Array(bins).fill(0);
+  vals.forEach(v => { counts[Math.min(bins-1, Math.floor((v-lo)/width))]++; });
+  const maxC = Math.max(...counts);
+  const W = 520, H = 170, L = 34, B = 28, T = 10, R = 8;
+  const px = i => L + i * (W-L-R)/bins;
+  const bw = (W-L-R)/bins;
+  const py = n => T + (H-T-B) * (1 - n/maxC);
+  const bars = counts.map((n,i) => `
+    <rect class="bar" data-bin="${i}" x="${(px(i)+1).toFixed(2)}" y="${py(n).toFixed(2)}"
+      width="${(bw-2).toFixed(2)}" height="${(H-B-py(n)).toFixed(2)}" rx="2"
+      fill="var(--s1)" tabindex="0" aria-label="${n} cells">
+      <title>${fmt(lo+i*width,2)}–${fmt(lo+(i+1)*width,2)}: ${n} cells</title></rect>`).join('');
+  const ticks = [0, Math.ceil(maxC/2), maxC].map(v => `
+    <line class="gridline" x1="${L}" x2="${W-R}" y1="${py(v)}" y2="${py(v)}"/>
+    <text x="${L-6}" y="${py(v)+3}" text-anchor="end">${v}</text>`).join('');
+  const xcols = [0, Math.floor(bins/2), bins-1].map(i =>
+    `<text x="${px(i)}" y="${H-B+14}">${fmt(lo+i*width,1)}</text>`).join('');
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Distribution of target cell values">
+    ${ticks}${bars}<line class="axis-line" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"/>
+    <text x="${L}" y="${H-6}" class="direct">value (${vals.length} cells)</text>
+    ${xcols}</svg>
+    <div class="tooltip" id="histTip"></div>`;
+  const tip = $('#histTip');
+  box.querySelectorAll('.bar').forEach(bar => {
+    bar.addEventListener('mousemove', ev => {
+      const i = +bar.dataset.bin;
+      tip.innerHTML = `<div class="k">${fmt(lo+i*width,2)} – ${fmt(lo+(i+1)*width,2)}</div>
+        <div class="tt-v">${counts[i]}</div><div class="k">cells</div>`;
+      tip.classList.add('show');
+      const br = box.getBoundingClientRect();
+      tip.style.left = (ev.clientX - br.left + 10) + 'px';
+      tip.style.top = (ev.clientY - br.top - 8) + 'px';
+    });
+    bar.addEventListener('mouseleave', () => tip.classList.remove('show'));
+  });
+  // Scale note: the hist shows the *fused* values including merged cells.
+  $('#histNote').textContent = `${lo.toFixed(2)} … ${hi.toFixed(2)} · ${vals.length} valued cells`;
+}
+
+/* ---------- overlap review ---------- */
+async function loadOverlaps() {
+  const body = requestBody();
+  try {
+    const res = await api('/api/overlaps', {method:'POST', body: JSON.stringify(body)});
+    S.ledger = res;
+    renderOverlaps();
+    toast('Overlap ledger loaded');
+  } catch (e) { toast(e.message, true); }
+}
+
+function renderOverlaps() {
+  const L = S.ledger;
+  if (!L) return;
+  const s = L.summary;
+  $('#ovCount').textContent = `${s.total_pairs} cell pairs`;
+  const caseRows = Object.entries(s.by_case).map(([k,v]) =>
+    `<tr><td>${esc({both:'both valid',a_only:'only A valid',b_only:'only B valid',neither:'both missing'}[k]||k)}</td>
+     <td class="n">${v.pairs}</td><td class="n">${fmt(v.area,1)}</td></tr>`).join('');
+  $('#ovSummary').innerHTML = `
+    <div class="k">shared footprint ${fmt(s.shared_footprint_area,1)} m² · both-valid pairs ${s.both_valid_pairs}</div>
+    <div class="k">mean Δ (B−A) <strong>${fmt(s.mean_difference_b_minus_a,3)}</strong>
+      · mean |Δ| ${fmt(s.mean_abs_difference,3)} · max |Δ| ${fmt(s.max_abs_difference,3)}</div>
+    <div class="k">mean relative Δ ${pct(s.mean_relative_difference)}</div>`;
+  $('#ovCases').innerHTML = `<table><thead><tr><th>pair case</th><th class="n">pairs</th>
+    <th class="n">area m²</th></tr></thead><tbody>${caseRows}</tbody></table>`;
+}
+
+/* ---------- wiring ---------- */
+const params = new URLSearchParams(location.search);
+function deepLink() {
+  const g = k => params.get(k);
+  if (g('size')) $('#tg-size').value = g('size');
+  if (g('nx')) $('#tg-nx').value = g('nx');
+  if (g('ny')) $('#tg-ny').value = g('ny');
+  if (g('policy')) $('#policy').value = g('policy');
+  if (g('method')) $('#method').value = g('method');
+  if (params.get('theme')) document.documentElement.dataset.theme = params.get('theme');
+}
+
+async function applyTargetFromParams() {
+  if (!params.get('size') && !params.get('nx')) return;
+  await runCompute();
+}
+
+$('#themeBtn').onclick = () => {
+  const dark = document.documentElement.dataset.theme === 'dark'
+    || (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+  if (S.result) renderMap();
+};
+$('#resetBtn').onclick = async () => {
+  try {
+    await api('/api/fixtures/reset', {method:'POST', body:'{}'});
+    S.result = null; S.prev = null; S.ledger = null; S.state = null;
+    await loadState(); renderAllEmpty();
+    toast('Fixtures reset to ALPHA v1 / BETA v1');
+  } catch (e) { toast(e.message, true); }
+};
+function renderAllEmpty() {
+  $('#stats').innerHTML = ''; $('#semantics').innerHTML = '';
+  $('#blocks').innerHTML = '<div class="k">No result yet.</div>';
+  $('#provenance').innerHTML = '<div class="k">No result yet.</div>';
+  $('#identity').innerHTML = 'No result yet.';
+  $('#diff').innerHTML = '<div class="k">Compute twice with a revision in between to see what moved.</div>';
+  $('#warnings').innerHTML = ''; $('#hist').innerHTML = '<div class="k">No result yet.</div>';
+  $('#legend').innerHTML = ''; $('#map').innerHTML = '';
+  $('#artFp').textContent = ''; $('#dlHtml').disabled = true; $('#dlJson').disabled = true;
+  $('#ovSummary').innerHTML = ''; $('#ovCases').innerHTML = ''; $('#ovCount').textContent = '';
+  $('#staleness').innerHTML = '';
+}
+['#tg-size','#tg-nx','#tg-ny','#tg-ox','#tg-oy'].forEach(sel => $(sel).onchange = syncSemantics);
+['#statScale','#method','#policy','#fill'].forEach(sel => $(sel).onchange = syncSemantics);
+$('#runBtn').onclick = runCompute;
+$('#cancelBtn').onclick = async () => {
+  if (!S.runId) return;
+  try { await api(`/api/compute/${S.runId}/cancel`, {method:'POST', body:'{}'}); S.cancelled = true; toast('Stop requested'); }
+  catch (e) { toast(e.message, true); }
+};
+$('#validateBtn').onclick = async () => {
+  try {
+    const r = await api('/api/validate', {method:'POST', body: JSON.stringify(requestBody())});
+    toast(r.ok ? `Request OK · ${r.target_cells} target cells` : 'Issues: ' + r.issues.join('; '), !r.ok);
+  } catch (e) { toast(e.message, true); }
+};
+$('#ovLoad').onclick = loadOverlaps;
+$('#keepBtn').onclick = () => {
+  if (!S.result) { toast('Compute a report first', true); return; }
+  S.prev = S.result;
+  renderDiffHint();
+  toast('Pinned ' + S.result.fingerprint.slice(0,10) + ' as the baseline');
+};
+$('#benchBtn').onclick = loadBenchmark;
+$('#dlHtml').onclick = () => { if (S.result) window.open('/api/report/' + S.result.computation_id, '_blank'); };
+$('#dlJson').onclick = () => { if (S.result) window.open('/api/report/' + S.result.computation_id + '.json', '_blank'); };
+$$('.overlayBtn').forEach(b => b.onclick = () => {
+  S.overlay = b.dataset.layer;
+  $$('.overlayBtn').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  renderMap();
+});
+
+(async function init() {
+  deepLink();
+  syncSemantics();
+  try {
+    await loadState();
+  } catch (e) {
+    $('#genline').textContent = 'server unreachable: ' + e.message;
+  }
+  if (params.get('autoload')) {
+    const q = new URLSearchParams({nx: $('#tg-nx').value, ny: $('#tg-ny').value,
+      dx: $('#tg-size').value, dy: $('#tg-size').value,
+      origin_x: $('#tg-ox').value, origin_y: $('#tg-oy').value, name:'QUERY'});
+    try {
+      const res = await api('/api/overlaps?' + q.toString());
+      S.ledger = {summary: res.summary, records: res.records}; renderOverlaps();
+    } catch (e) { /* non-fatal */ }
+  }
+  await applyTargetFromParams();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "source": "BETA",
+  "mode": "patch",
+  "cells": [
+    [
+      2,
+      4,
+      15.8328,
+      0.0009
+    ],
+    [
+      3,
+      3,
+      15.5053,
+      0.0009
+    ],
+    [
+      3,
+      4,
+      15.8779,
+      0.0009
+    ],
+    [
+      4,
+      3,
+      15.3345,
+      0.0009
+    ],
+    [
+      4,
+      4,
+      15.9277,
+      0.0009
+    ]
+  ],
+  "comment": "revised lake cells with their own error variance; absence means unchanged, not missing"
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Region report c_93ce0c71ade7 - 7f00692ab1</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 14px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+         max-width: 1080px; margin: 32px auto; padding: 0 20px;
+         color: #0b0b0b; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { color: #f0efec; background: #0d0d0d; } }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 28px 0 8px; border-bottom: 1px solid #c3c2b7; padding-bottom: 4px; }
+  .sub { color: #52514e; margin-bottom: 16px; }
+  @media (prefers-color-scheme: dark) { .sub { color: #c3c2b7; } }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .card { border: 1px solid rgba(11,11,11,.12); border-radius: 8px; padding: 12px 14px; background: #fcfcfb; }
+  @media (prefers-color-scheme: dark) { .card { background: #1a1a19; border-color: rgba(255,255,255,.12); } }
+  .k { font-size: 12px; color: #52514e; }
+  @media (prefers-color-scheme: dark) { .k { color: #c3c2b7; } }
+  .v { font-size: 22px; font-variant-numeric: tabular-nums; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { padding: 4px 8px; border-bottom: 1px solid rgba(11,11,11,.10); text-align: left; }
+  @media (prefers-color-scheme: dark) { th, td { border-color: rgba(255,255,255,.10); } }
+  th { font-size: 12px; color: #52514e; font-weight: 600; }
+  .n { text-align: right; }
+  code { font-size: 12px; }
+  .ok { background: #e7f4e7; color: #0b3d0b; padding: 8px 12px; border-radius: 6px; }
+  .stale { background: #fdecec; color: #7a1f1f; padding: 8px 12px; border-radius: 6px; }
+  ul { margin: 4px 0 12px 20px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 720px) { .two { grid-template-columns: 1fr; } }
+  pre { background: #efeee9; padding: 10px; border-radius: 6px; overflow-x: auto; font-size: 12px; }
+  @media (prefers-color-scheme: dark) { pre { background: #232320; } }
+</style></head>
+<body>
+<h1>Region statistics report - pointwise area accounting</h1>
+<div class="sub">Computation <code>c_93ce0c71ade7</code> &middot;
+fingerprint <code>7f00692ab1777c15439d3232a0e3fbcbefa3737e5b188a02390d82def8985592</code> &middot;
+2026-11-17T05:53:35Z &rarr; 2026-11-17T05:53:35Z (0.00 s)</div>
+<div class='ok'><strong>Inputs pinned.</strong> This report names the exact source versions and content hashes it was computed from.</div>
+
+<div class="grid">
+  <div class="card"><div class="k">Support-weighted mean</div>
+    <div class="v">14.384</div>
+    <div class="k">intensive field, over observed support</div></div>
+  <div class="card"><div class="k">Area integral (aggregate)</div>
+    <div class="v">20943.1</div>
+    <div class="k">value &times; area, over observed support</div></div>
+  <div class="card"><div class="k">Observed coverage</div>
+    <div class="v">84.3%</div>
+    <div class="k">1456.0 of 1728.0 m&sup2;</div></div>
+  <div class="card"><div class="k">Missing / uncovered</div>
+    <div class="v">2 / 0</div>
+    <div class="k">cells missing inside a footprint / uncovered cells</div></div>
+</div>
+
+<h2>What this run keeps and what it does not</h2>
+<div class="two">
+  <div><div class="k">Preserved</div><ul><li>the owning source&#x27;s observed area integral inside each target cell</li><li>the owning source&#x27;s mean over its own support</li></ul></div>
+  <div><div class="k">Explicitly not preserved</div><ul><li>the other source&#x27;s values where the two overlap</li><li>a per-cell count (the field is intensive)</li><li>anything over uncovered ground (coverage is reported, not imputed)</li></ul></div>
+</div>
+<p>One source owns each cell, so its integral is copied faithfully; the price is that the overlapping source is discarded there, which the overlap ledger quantifies.</p>
+
+<h2>Inputs pinned by this report</h2>
+<table><thead><tr><th>source</th><th>version</th><th>grid</th>
+<th>cell size</th><th>origin x</th><th>valid / cells</th><th>mean of valid</th>
+<th>sha256</th></tr></thead><tbody><tr><td>ALPHA</td><td>1</td><td>12&nbsp;x&nbsp;9</td><td>4.000 / 4.000</td><td>(0.00, 0.00)</td><td>91 / 108</td><td>14.384</td><td><code>f3970cb0afcd9159</code></td></tr><tr><td>BETA</td><td>1</td><td>8&nbsp;x&nbsp;8</td><td>3.000 / 3.000</td><td>(18.00, 6.00)</td><td>59 / 64</td><td>15.796</td><td><code>8c1b311501fd1522</code></td></tr></tbody></table>
+<p class="k">Target: TARGET 8&times;6 cells of 6.0&times;6.0 m
+at origin (0.0, 0.0); method
+<strong>conservative</strong>, overlap policy
+<strong>priority</strong>
+(priority: ALPHA &gt; BETA),
+field semantics <strong>intensive</strong>.</p>
+
+<h2>Per-cell accounting</h2>
+<table><thead><tr><th>status</th><th class="n">cells</th></tr></thead>
+<tbody><tr><td>single source</td><td class='n'>30</td></tr><tr><td>overlap cells</td><td class='n'>16</td></tr><tr><td>missing inside footprint</td><td class='n'>2</td></tr><tr><td>no source footprint</td><td class='n'>0</td></tr><tr><td>invented (zone fallback)</td><td class='n'>0</td></tr></tbody></table>
+
+<h2>Regional blocks</h2>
+<table><thead><tr><th>block</th><th class="n">support mean</th><th class="n">integral</th>
+<th class="n">support area (m&sup2;)</th><th class="n">block area (m&sup2;)</th>
+<th class="n">coverage</th><th class="n">cells touched</th></tr></thead>
+<tbody><tr><td>domain</td><td class='n'>14.384</td><td class='n'>20943.118</td><td class='n'>1456.000</td><td class='n'>1728.000</td><td class='n'>84.3%</td><td class='n'>46</td></tr><tr><td>SW</td><td class='n'>14.138</td><td class='n'>5881.286</td><td class='n'>416.000</td><td class='n'>432.000</td><td class='n'>96.3%</td><td class='n'>12</td></tr><tr><td>SE</td><td class='n'>16.395</td><td class='n'>5771.010</td><td class='n'>352.000</td><td class='n'>432.000</td><td class='n'>81.5%</td><td class='n'>12</td></tr><tr><td>NW</td><td class='n'>11.484</td><td class='n'>4961.071</td><td class='n'>432.000</td><td class='n'>432.000</td><td class='n'>100.0%</td><td class='n'>12</td></tr><tr><td>NE</td><td class='n'>16.913</td><td class='n'>4329.751</td><td class='n'>256.000</td><td class='n'>432.000</td><td class='n'>59.3%</td><td class='n'>10</td></tr></tbody></table>
+
+<h2>Overlap review</h2>
+<table><thead><tr><th>pair case</th><th class="n">cell pairs</th><th class="n">shared area (m&sup2;)</th></tr></thead>
+<tbody><tr><td>both sides valid</td><td class='n'>101</td><td class='n'>417.0</td></tr><tr><td>only A valid</td><td class='n'>12</td><td class='n'>35.0</td></tr><tr><td>only B valid</td><td class='n'>25</td><td class='n'>114.0</td></tr><tr><td>both missing</td><td class='n'>6</td><td class='n'>10.0</td></tr></tbody></table>
+<p>Pairs with both sides valid: <strong>101</strong>;
+mean difference (B&minus;A) <strong>0.1750</strong>;
+mean absolute difference <strong>0.3484</strong>;
+max absolute difference <strong>0.9810</strong>.
+Shared footprint area is counted once in every total, because support is a
+union over valid cells, not a sum over contributors.</p>
+<table><thead><tr><th>source A cell</th><th class="n">A value</th><th>source B cell</th>
+<th class="n">B value</th><th class="n">B&minus;A</th><th class="n">shared m&sup2;</th>
+<th class="n">target cells</th></tr></thead><tbody><tr><td>ALPHA[64]</td><td class='n'>12.7634</td><td>BETA[32]</td><td class='n'>13.7444</td><td class='n'>0.9810</td><td class='n'>2.00</td><td class='n'>1</td></tr><tr><td>ALPHA[77]</td><td class='n'>13.2327</td><td>BETA[56]</td><td class='n'>12.2616</td><td class='n'>-0.9711</td><td class='n'>1.00</td><td class='n'>1</td></tr><tr><td>ALPHA[52]</td><td class='n'>13.4309</td><td>BETA[24]</td><td class='n'>14.3913</td><td class='n'>0.9604</td><td class='n'>4.00</td><td class='n'>1</td></tr><tr><td>ALPHA[91]</td><td class='n'>15.1551</td><td>BETA[60]</td><td class='n'>16.1059</td><td class='n'>0.9508</td><td class='n'>4.00</td><td class='n'>1</td></tr><tr><td>ALPHA[65]</td><td class='n'>13.4427</td><td>BETA[33]</td><td class='n'>14.3862</td><td class='n'>0.9435</td><td class='n'>3.00</td><td class='n'>1</td></tr><tr><td>ALPHA[45]</td><td class='n'>16.3783</td><td>BETA[31]</td><td class='n'>17.2892</td><td class='n'>0.9109</td><td class='n'>1.00</td><td class='n'>1</td></tr><tr><td>ALPHA[76]</td><td class='n'>11.9373</td><td>BETA[48]</td><td class='n'>12.7611</td><td class='n'>0.8238</td><td class='n'>6.00</td><td class='n'>1</td></tr><tr><td>ALPHA[88]</td><td class='n'>11.4414</td><td>BETA[56]</td><td class='n'>12.2616</td><td class='n'>0.8202</td><td class='n'>4.00</td><td class='n'>1</td></tr><tr><td>ALPHA[41]</td><td class='n'>15.1444</td><td>BETA[24]</td><td class='n'>14.3913</td><td class='n'>-0.7531</td><td class='n'>1.00</td><td class='n'>1</td></tr><tr><td>ALPHA[57]</td><td class='n'>16.9256</td><td>BETA[39]</td><td class='n'>17.6786</td><td class='n'>0.7530</td><td class='n'>2.00</td><td class='n'>1</td></tr><tr><td>ALPHA[81]</td><td class='n'>17.7347</td><td>BETA[63]</td><td class='n'>18.4792</td><td class='n'>0.7445</td><td class='n'>1.00</td><td class='n'>1</td></tr><tr><td>ALPHA[28]</td><td class='n'>15.2428</td><td>BETA[0]</td><td class='n'>15.9651</td><td class='n'>0.7223</td><td class='n'>2.00</td><td class='n'>1</td></tr><tr><td>ALPHA[79]</td><td class='n'>15.4249</td><td>BETA[52]</td><td class='n'>16.1315</td><td class='n'>0.7066</td><td class='n'>6.00</td><td class='n'>1</td></tr><tr><td>ALPHA[92]</td><td class='n'>16.7949</td><td>BETA[60]</td><td class='n'>16.1059</td><td class='n'>-0.6890</td><td class='n'>2.00</td><td class='n'>1</td></tr><tr><td>ALPHA[79]</td><td class='n'>15.4249</td><td>BETA[60]</td><td class='n'>16.1059</td><td class='n'>0.6810</td><td class='n'>2.00</td><td class='n'>1</td></tr></tbody></table>
+
+<h2>Warnings and decisions</h2>
+<ul><li>16 target cells are covered by more than one source; overlap policy was priority</li></ul>
+
+<h2>Cell table</h2>
+<table><thead><tr><th>row</th><th>col</th><th>x</th><th>y</th><th>value</th><th>status</th><th>origin</th><th>support share</th><th>observed share</th><th>contributors</th></tr></thead><tbody><tr><td class='n'>0</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>3.0</td><td class='n'>13.046</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>3.0</td><td class='n'>14.622</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>3.0</td><td class='n'>16.026</td><td>single source</td><td>source</td><td class='n'>0.778</td><td class='n'>0.778</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>3.0</td><td class='n'>16.158</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>3.0</td><td class='n'>16.075</td><td>single source</td><td>source</td><td class='n'>0.333</td><td class='n'>0.333</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>3.0</td><td class='n'>15.902</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>3.0</td><td class='n'>15.987</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>0</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>3.0</td><td class='n'>16.772</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>9.0</td><td class='n'>12.608</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>9.0</td><td class='n'>14.012</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>9.0</td><td class='n'>15.055</td><td>single source</td><td>source</td><td class='n'>0.778</td><td class='n'>0.778</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>9.0</td><td class='n'>15.541</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>9.0</td><td class='n'>15.717</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.333</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>9.0</td><td class='n'>15.900</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>9.0</td><td class='n'>16.239</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>1</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>9.0</td><td class='n'>16.915</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>15.0</td><td class='n'>11.873</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>15.0</td><td class='n'>12.838</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>15.0</td><td class='n'>13.865</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>15.0</td><td class='n'>14.632</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>15.0</td><td class='n'>15.586</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.333</td><td class='n'>0.917</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>15.0</td><td class='n'>15.873</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.778</td><td class='n'>0.944</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>15.0</td><td class='n'>16.801</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>2</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>15.0</td><td class='n'>17.651</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>21.0</td><td class='n'>11.251</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>21.0</td><td class='n'>11.814</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>21.0</td><td class='n'>12.852</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>21.0</td><td class='n'>13.475</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>21.0</td><td class='n'>15.612</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.333</td><td class='n'>0.917</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>21.0</td><td class='n'>16.048</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.778</td><td class='n'>0.944</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>21.0</td><td class='n'>17.491</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>3</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>21.0</td><td class='n'>18.209</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>27.0</td><td class='n'>10.636</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>27.0</td><td class='n'>10.747</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>27.0</td><td class='n'>11.399</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>27.0</td><td class='n'>12.592</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>27.0</td><td class='n'>15.335</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.333</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>27.0</td><td class='n'>16.216</td><td>overlap (merged)</td><td>overlap</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>27.0</td><td class='n'>17.945</td><td>overlap (merged)</td><td>overlap</td><td class='n'>0.667</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>4</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>27.0</td><td class='n'>18.727</td><td>single source</td><td>source</td><td class='n'>0.667</td><td class='n'>0.667</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>0</td><td class='n'>3.0</td><td class='n'>33.0</td><td class='n'>10.185</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>1</td><td class='n'>9.0</td><td class='n'>33.0</td><td class='n'>10.132</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>2</td><td class='n'>15.0</td><td class='n'>33.0</td><td class='n'>10.715</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>3</td><td class='n'>21.0</td><td class='n'>33.0</td><td class='n'>12.009</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>4</td><td class='n'>27.0</td><td class='n'>33.0</td><td class='n'>15.084</td><td>single source</td><td>source</td><td class='n'>0.333</td><td class='n'>0.333</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>5</td><td class='n'>33.0</td><td class='n'>33.0</td><td class='n'>16.081</td><td>single source</td><td>source</td><td class='n'>1.000</td><td class='n'>1.000</td><td>ALPHA</td></tr><tr><td class='n'>5</td><td class='n'>6</td><td class='n'>39.0</td><td class='n'>33.0</td><td class='n'>not defined</td><td>missing inside a footprint</td><td>none</td><td class='n'>0.000</td><td class='n'>0.000</td><td></td></tr><tr><td class='n'>5</td><td class='n'>7</td><td class='n'>45.0</td><td class='n'>33.0</td><td class='n'>not defined</td><td>missing inside a footprint</td><td>none</td><td class='n'>0.000</td><td class='n'>0.000</td><td></td></tr></tbody></table>
+
+<h2>Reproduce</h2>
+<pre>{
+  &quot;manifest&quot;: {
+    &quot;fingerprint&quot;: &quot;7f00692ab1777c15439d3232a0e3fbcbefa3737e5b188a02390d82def8985592&quot;,
+    &quot;sources&quot;: [
+      {
+        &quot;sha256&quot;: &quot;f3970cb0afcd91592a9e2f2b46bea9ba929ba44d7855a7cba8ab49e739dd1f96&quot;,
+        &quot;source&quot;: &quot;ALPHA&quot;,
+        &quot;version&quot;: 1
+      },
+      {
+        &quot;sha256&quot;: &quot;8c1b311501fd1522a7b4abf8dbe3a9ecdd303093e73b5b444cb568a9206e9cb1&quot;,
+        &quot;source&quot;: &quot;BETA&quot;,
+        &quot;version&quot;: 1
+      }
+    ],
+    &quot;target&quot;: {
+      &quot;dx&quot;: 6.0,
+      &quot;dy&quot;: 6.0,
+      &quot;name&quot;: &quot;TARGET&quot;,
+      &quot;nx&quot;: 8,
+      &quot;ny&quot;: 6,
+      &quot;origin_x&quot;: 0.0,
+      &quot;origin_y&quot;: 0.0,
+      &quot;version&quot;: 0
+    }
+  },
+  &quot;request&quot;: {
+    &quot;fill&quot;: &quot;none&quot;,
+    &quot;fill_max_distance&quot;: 0.0,
+    &quot;fill_weight&quot;: &quot;inverse_square&quot;,
+    &quot;include_zonal_in_mean&quot;: false,
+    &quot;method&quot;: &quot;conservative&quot;,
+    &quot;overlap_policy&quot;: &quot;priority&quot;,
+    &quot;priority&quot;: [
+      &quot;ALPHA&quot;,
+      &quot;BETA&quot;
+    ],
+    &quot;review_overlaps&quot;: true,
+    &quot;stat_scale&quot;: &quot;intensive&quot;,
+    &quot;target&quot;: {
+      &quot;dx&quot;: 6.0,
+      &quot;dy&quot;: 6.0,
+      &quot;name&quot;: &quot;TARGET&quot;,
+      &quot;nx&quot;: 8,
+      &quot;ny&quot;: 6,
+      &quot;origin_x&quot;: 0.0,
+      &quot;origin_y&quot;: 0.0,
+      &quot;unit&quot;: &quot;m&quot;
+    },
+    &quot;target_version&quot;: 0
+  }
+}</pre>
+</body></html>
